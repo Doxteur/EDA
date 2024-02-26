@@ -1,7 +1,7 @@
 // productService.js
 const express = require('express');
 const bodyParser = require('body-parser');
-const eventEmitter = require('./eventEmitter');
+const eventEmitter = require('../shared/eventEmitter');
 const Product = require('./productModel');
 
 const app = express();
@@ -12,9 +12,11 @@ app.use(bodyParser.json());
 app.post('/products', (req, res) => {
   const { id, name, price } = req.body;
   const newProduct = new Product(id, name, price);
+  console.log('newProduct', newProduct);
 
   // Émettre un événement de création de produit
   eventEmitter.emit('nouveauProduit', newProduct);
+
 
   res.status(201).json(newProduct);
 });
