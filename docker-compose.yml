@@ -1,0 +1,42 @@
+version: '3'
+services:
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    depends_on:
+      - mongo
+    networks:
+      - my-network
+  orderservice:
+    build:
+      context: ./order
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - productservice
+    networks:
+      - my-network
+  productservice:
+    build:
+      context: ./product
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mongo
+    networks:
+      - my-network
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
